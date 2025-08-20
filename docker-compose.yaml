@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: crud-postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: crud_especializacion_db
+      POSTGRES_USER: crud_admin
+      POSTGRES_PASSWORD: crud_password_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - crud-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crud-nestjs-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: crud_especializacion_db
+      DATABASE_USER: crud_admin
+      DATABASE_PASSWORD: crud_password_2024
+    networks:
+      - crud-network
+
+volumes:
+  postgres_data:
+
+networks:
+  crud-network:
+    driver: bridge
