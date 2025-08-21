@@ -120,54 +120,6 @@ export class ProductsService {
   }
 
   /**
-   * Busca productos por categoría usando consulta parametrizada
-   * @param {string} category - Categoría a buscar
-   * @returns {Promise<Product[]>} Lista de productos de la categoría
-   */
-  async findByCategory(category: string): Promise<Product[]> {
-    return await this._productRepository
-      .createQueryBuilder('product')
-      .where('LOWER(product.category) = LOWER(:category)', { category })
-      .andWhere('product.isAvailable = :isAvailable', { isAvailable: true })
-      .orderBy('product.price', 'ASC')
-      .getMany();
-  }
-
-  /**
-   * Busca productos por rango de precio usando consultas BETWEEN
-   * @param {number} minPrice - Precio mínimo
-   * @param {number} maxPrice - Precio máximo
-   * @returns {Promise<Product[]>} Lista de productos en el rango de precio
-   */
-  async findByPriceRange(
-    minPrice: number,
-    maxPrice: number,
-  ): Promise<Product[]> {
-    return await this._productRepository
-      .createQueryBuilder('product')
-      .where('product.price BETWEEN :minPrice AND :maxPrice', {
-        minPrice,
-        maxPrice,
-      })
-      .andWhere('product.isAvailable = :isAvailable', { isAvailable: true })
-      .orderBy('product.price', 'ASC')
-      .getMany();
-  }
-
-  /**
-   * Busca productos con stock bajo usando consulta personalizada
-   * @param {number} threshold - Umbral de stock bajo (default: 10)
-   * @returns {Promise<Product[]>} Lista de productos con stock bajo
-   */
-  async findLowStock(threshold: number = 10): Promise<Product[]> {
-    return await this._productRepository
-      .createQueryBuilder('product')
-      .where('product.stock <= :threshold', { threshold })
-      .orderBy('product.stock', 'ASC')
-      .getMany();
-  }
-
-  /**
    * Actualiza un producto existente usando UPDATE personalizado
    * @param {number} id - ID del producto a actualizar
    * @param {UpdateProductDto} updateProductDto - Datos a actualizar

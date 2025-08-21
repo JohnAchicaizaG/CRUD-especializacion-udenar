@@ -47,7 +47,7 @@ export class CreateProductDto {
     { message: 'El precio debe ser un número decimal con máximo 2 decimales' },
   )
   @IsPositive({ message: 'El precio debe ser un número positivo' })
-  @Transform(({ value }) => parseFloat(value))
+  @Transform(({ value }: { value: string }) => parseFloat(value))
   price: number;
 
   /**

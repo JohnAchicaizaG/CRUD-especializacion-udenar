@@ -10,7 +10,6 @@ import {
   HttpStatus,
   ParseIntPipe,
   ValidationPipe,
-  Query,
   Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
@@ -60,51 +59,6 @@ export class ProductsController {
   @HttpCode(HttpStatus.OK)
   async findAvailable(): Promise<Product[]> {
     return await this._productsService.findAvailable();
-  }
-
-  /**
-   * Endpoint para obtener productos con stock bajo
-   * @route GET /products/low-stock
-   * @param {number} threshold - Umbral de stock bajo (query param)
-   * @returns {Promise<Product[]>} Lista de productos con stock bajo
-   */
-  @Get('low-stock')
-  @HttpCode(HttpStatus.OK)
-  async findLowStock(
-    @Query('threshold', new ParseIntPipe({ optional: true }))
-    threshold?: number,
-  ): Promise<Product[]> {
-    return await this._productsService.findLowStock(threshold);
-  }
-
-  /**
-   * Endpoint para buscar productos por categoría
-   * @route GET /products/category/:category
-   * @param {string} category - Categoría del producto
-   * @returns {Promise<Product[]>} Lista de productos de la categoría
-   */
-  @Get('category/:category')
-  @HttpCode(HttpStatus.OK)
-  async findByCategory(
-    @Param('category') category: string,
-  ): Promise<Product[]> {
-    return await this._productsService.findByCategory(category);
-  }
-
-  /**
-   * Endpoint para buscar productos por rango de precio
-   * @route GET /products/price-range
-   * @param {number} min - Precio mínimo (query param)
-   * @param {number} max - Precio máximo (query param)
-   * @returns {Promise<Product[]>} Lista de productos en el rango de precio
-   */
-  @Get('price-range')
-  @HttpCode(HttpStatus.OK)
-  async findByPriceRange(
-    @Query('min', ParseIntPipe) min: number,
-    @Query('max', ParseIntPipe) max: number,
-  ): Promise<Product[]> {
-    return await this._productsService.findByPriceRange(min, max);
   }
 
   /**

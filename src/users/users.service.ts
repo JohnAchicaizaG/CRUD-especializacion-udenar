@@ -31,7 +31,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       await this._validateEmailUniqueness(createUserDto.email);
-      
+
       const user = this._userRepository.create(createUserDto);
       return await this._userRepository.save(user);
     } catch (error) {
@@ -60,11 +60,11 @@ export class UsersService {
    */
   async findOne(id: number): Promise<User> {
     const user = await this._userRepository.findOne({ where: { id } });
-    
+
     if (!user) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
     }
-    
+
     return user;
   }
 
